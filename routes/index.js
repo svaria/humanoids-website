@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/hw1', function(req, res, next) {
-  res.render('hwtemplate', { title: 'Homework 1', description: 'Here is our submission for homework 1',code: "submission/ass2-arm.zip" });
+  res.render('hw1', { title: 'Homework 1', code: "submission/ass2-arm.zip" });
 });
 
 router.get('/hw2', function(req, res, next) {
