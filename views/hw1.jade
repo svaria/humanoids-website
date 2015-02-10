@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  p To solve this problem we added two sets of constraints, and ran fmincon twice. Essentially, we map a trajectory to our pregrasp position and then after that map a trajectory from our pregrasp to our grasp position. This was not the original method we used however. We originally tried to use one set of constraints and then case out when the hand got close enough to the pregrasp. At this point we would use a different set of constraints but the same fmin call. This did not always yield a result that made it to the pregrasp position due to the fact that we only switched to the grasp constraints when one of the eq_violations was less than some threshold. Since this threshold does not change even though the target differs in location, we cannot guarantee that we make it to the end location.
+
+  p This was remedied by instead making two calls to fmincon which allowed us to first map a trajectory to the pregrasp and then a trajectory to the grasp.
+
+  p We similarly had an issue with choosing a valid pregrasp. We made a simplification that essentially set the pregrasp to 0.0125 units down in the y direction and accordingly (because of the angle of target) in the x direction. We experimented with instead moving 0.0125 units in the x direction but due to the orientation of the arm and the fact that it can only reach in the positive region (described below), it made more sense to move (absolutely) in the y direction. This along with having to choose a good pregrasp distance was a matter of experimentation (one could formalize the calculation of pregrasp, but we vouched for a very simple method that yielded good results).
+
+  ol
+    li A target cannot be reached when the constraints do not allow the joint angles to be aligned in a way to reach the target (i.e. nonhuman movement). Oppositely, the optimizer gets stuck at a local minimum when the current angle configuration does not reach the target, even though there exists angles within the constraints to reach it.
+
+    li If the arm didn’t have any joint restraints it could reach anything in a circle with radius equal to the length of the arm. Adding the constraints shrinks the accessibility range to only the first quadrant, we cannot have a –x or –y value.  Its range in this area is also limited by the joint angles making goals closer to the origin less accessible than those further from the origin. If the angle of the goal is less than -pi/2 then it can’t be reached in the positive case, due to the fact that the target will be vertical and thus unreachable
+
+    li With the standard elbow joint limits, the arm can reach objects in the positive x and positive y quadrant, as discussed above (with your center as the origin). Changing the elbow joint limits (for example, flipping the limits), allows the arm to reach objects in the positive x and negative y quadrant. However, the arm’s range of motion with these changed elbow joint bounds is still limited by the configuration and limits of the other joints (like the spine and shoulder). The arm also cannot reach objects with an angle of more than pi/2 with these changed elbow joint limits.
+  a(href=code) Code
