@@ -10,9 +10,9 @@ router.get('/hw2', function(req, res, next) {
   res.render('hw2', { title: 'Homework 2', code: "submission/ass2-arm.zip" });
 });
 
-//router.get('/hw2', function(req, res, next) {
-//  res.render('hwtemplate', { title: 'Homework 2', description: 'Here is our submission for homework 2',code: "images/test.jpg" });
-//});
+router.get('/hw3', function(req, res, next) {
+  res.render('hw3', { title: 'Homework 3', code: "submission/vision.zip" });
+});
 
 
 module.exports = router;
