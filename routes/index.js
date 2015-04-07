@@ -14,5 +14,8 @@ router.get('/hw3', function(req, res, next) {
   res.render('hw3', { title: 'Homework 3', code: "submission/vision.zip" });
 });
 
+router.get('/hw4', function(req, res, next) {
+  res.render('hw4', { title: 'Homework 4', code: "submission/four.zip" });
+});
 
 module.exports = router;
